@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Modul Ajar & LKPD Universal 2026/2027</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Library FileSaver.js untuk Export Word -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+        
+        body { font-family: "Inter", sans-serif; }
+        
+        /* Tema Gradient Custom Premium */
+        .premium-gradient {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Paper Preview Styling (Meniru Tampilan Halaman A4 Word) */
+        .paper-preview {
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            color: #000000;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11pt;
+            line-height: 1.35;
+        }
+
+        /* Style elemen cetak di dalam preview */
+        #content-body h1, #content-body h2, #content-body h4 {
+            color: #000000;
+            margin-top: 12pt;
+            margin-bottom: 6pt;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #content-body h3 { 
+            font-size: 13pt; 
+            font-weight: bold; 
+            border-bottom: 2pt solid #1e3a8a; 
+            padding-bottom: 3pt; 
+            color: #1e3a8a; 
+            text-transform: uppercase;
+            margin-top: 16pt;
+            margin-bottom: 8pt;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        #content-body table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin-top: 6pt;
+            margin-bottom: 12pt; 
+            background-color: #ffffff;
+            font-size: 10.5pt;
+            table-layout: fixed; 
+        }
+
+        #content-body th, #content-body td { 
+            border: 1pt solid #cbd5e1; 
+            padding: 5pt 7pt; 
+            text-align: left; 
+            vertical-align: top; 
+            word-wrap: break-word; 
+        }
+        
+        #content-body th { 
+            background-color: #1e3a8a !important; 
+            color: #ffffff !important;
+            font-weight: bold; 
+            border-color: #1e3a8a !important;
+        }
+
+        /* Kolom pertama berwarna lembut untuk identifikasi field */
+        #content-body table:not(.signature-table):not(.kop-table) tr td:first-child {
+            background-color: #f8fafc;
+            font-weight: 600;
+            width: 32%;
+        }
+
+        #content-body td p { margin-top: 0; margin-bottom: 4pt; }
+        #content-body td p:last-child { margin-bottom: 0; }
+        #content-body td ul, #content-body td ol { margin-top: 0; margin-bottom: 0; padding-left: 16pt; }
+        #content-body td li { margin-bottom: 2pt; }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        /* Media Print Styling */
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white !important; padding: 0 !important; }
+            .paper-preview {
+                box-shadow: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 min-h-screen text-slate-100 font-sans pb-12">
+
+    <!-- OVERLAY LOADING -->
+    <div id="loading" class="loading-overlay text-white">
+        <div class="relative flex items-center justify-center">
+            <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-amber-400"></div>
+            <i class="fa-solid fa-robot text-2xl text-amber-400 absolute"></i>
+        </div>
+        <p class="text-xl font-bold mt-6 mb-1 tracking-wide">AI Memproses Modul Ajar Kurikulum 2026/2027...</p>
+        <p class="text-sm text-slate-300 font-medium">Menerapkan pendekatan Deep Learning (Mindful, Meaningful, Joyful)</p>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        
+        <!-- HEADER FORM -->
+        <div class="premium-gradient text-slate-800 rounded-3xl shadow-2xl p-6 md:p-8 mb-8 relative no-print overflow-hidden">
+            <!-- Decorative Banner Top -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-amber-400"></div>
+
+            <!-- Top Badge / Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+                <div class="inline-flex items-center gap-2 bg-slate-900 text-slate-100 text-xs px-4 py-2 rounded-full font-semibold shadow-md">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>Desain oleh Renjer_teraniaya &bull; www.tawakkal.id</span>
+                </div>
+                <div class="inline-flex items-center gap-2 bg-amber-500/10 text-amber-700 border border-amber-300 text-xs px-3.5 py-1.5 rounded-full font-bold">
+                    <i class="fa-solid fa-certificate"></i> Standards 2026/2027 (Deep Learning)
+                </div>
+            </div>
+
+            <div class="mb-6 border-b border-slate-300 pb-5">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-2 tracking-tight flex items-center gap-3">
+                    <span>🤖 AI Modul Ajar & LKPD Universal</span>
+                </h1>
+                <p class="text-sm md:text-base text-slate-600 font-medium">
+                    Generator Modul Ajar RPP Kurikulum Merdeka Terbaru dengan Integrasi 8 Dimensi Profil Lulusan & Deep Learning.
+                </p>
+            </div>
+
+            <!-- FORM INPUT GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="md:col-span-2 lg:col-span-3">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Topik Utama / Materi Pokok <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="topic" class="w-full bg-white border-2 border-slate-300 p-3.5 rounded-xl focus:border-slate-800 focus:ring-2 focus:ring-slate-300 outline-none transition-all text-slate-800 font-medium shadow-sm" placeholder="Contoh: Detektif Angka: Mengungkap Misteri Pola Bilangan dan Barisan">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Mata Pelajaran</label>
+                    <input type="text" id="mapel" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="Contoh: Matematika">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Elemen / Domain CP</label>
+                    <input type="text" id="elemen_cp" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="Contoh: Bilangan / Aljabar">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Fase / Kelas / Semester</label>
+                    <input type="text" id="fase" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="Contoh: Fase B / Kelas 4 / Ganjil">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Alokasi Waktu (JP)</label>
+                    <input type="text" id="alokasi_waktu" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="Contoh: 2 x 35 Menit (1 Pertemuan)">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tahun Ajaran</label>
+                    <input type="text" id="tahun_ajaran" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="2026/2027">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Model Pembelajaran</label>
+                    <select id="model_pembelajaran" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium">
+                        <option value="Problem Based Learning (PBL)">Problem Based Learning (PBL)</option>
+                        <option value="Project Based Learning (PjBL)">Project Based Learning (PjBL)</option>
+                        <option value="Discovery Learning">Discovery Learning</option>
+                        <option value="Inquiry Learning">Inquiry Learning</option>
+                        <option value="Cooperative Learning">Cooperative Learning</option>
+                        <option value="Diferensiasi Terintegrasi">Pembelajaran Berdiferensiasi</option>
+                        <option value="Tatap Muka / Reguler Terstruktur">Tatap Muka Terstruktur</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Guru Penyusun</label>
+                    <input type="text" id="teacher" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="RENJER, S.Pd">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Sekolah / Instansi</label>
+                    <input type="text" id="school" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium" placeholder="SMPN 8 MATARAM">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Upload Logo Sekolah (Kop)</label>
+                    <input type="file" id="school_logo" accept="image/*" class="w-full bg-white border-2 border-slate-300 p-2.5 rounded-xl text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-white hover:file:bg-slate-900 transition-all cursor-pointer">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pendekatan Belajar Utama</label>
+                    <select id="pendekatan" class="w-full bg-white border-2 border-slate-300 p-3 rounded-xl focus:border-slate-800 outline-none transition-all text-slate-800 font-medium">
+                        <option value="Deep Learning (Mindful, Meaningful, Joyful)">Deep Learning (Mindful, Meaningful, Joyful)</option>
+                        <option value="Culturally Responsive Teaching (CRT)">Culturally Responsive Teaching (CRT)</option>
+                        <option value="Teaching at the Right Level (TaRL)">Teaching at the Right Level (TaRL)</option>
+                        <option value="STEAM & Computational Thinking">STEAM & Computational Thinking</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- BUTTON ACTIONS -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <button onclick="generateAIContent()" class="action-btn flex-1 bg-slate-900 text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-slate-800 shadow-xl transition-all flex items-center justify-center gap-3 border border-slate-700">
+                    <i class="fa-solid fa-robot text-amber-400"></i>
+                    <span>Buat Modul Ajar dengan AI</span>
+                </button>
+                <button onclick="exportDoc()" class="action-btn flex-1 bg-blue-700 text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-blue-800 transition-all shadow-xl flex items-center justify-center gap-3 border border-blue-600">
+                    <i class="fa-solid fa-file-word"></i>
+                    <span>Unduh Format Word (.doc)</span>
+                </button>
+                <button onclick="window.print()" class="action-btn bg-emerald-700 text-white px-6 py-4 rounded-xl font-bold text-base hover:bg-emerald-800 transition-all shadow-xl flex items-center justify-center gap-2 border border-emerald-600">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Cetak / Save PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- AREA PREVIEW DOKUMEN -->
+        <div id="print-area" class="paper-preview hidden rounded-sm relative">
+            
+            <!-- Quick Action Toolbar inside Preview -->
+            <div class="no-print mb-6 pb-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 -mx-8 -mt-8 p-4 px-8 rounded-t-sm">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <i class="fa-solid fa-eye mr-1"></i> Preview Dokumen Cetak (A4 Format)
+                </span>
+                <button onclick="copyHtmlContent()" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-1.5 rounded transition">
+                    <i class="fa-solid fa-copy mr-1"></i> Salin HTML
+                </button>
+            </div>
+
+            <div id="content-body">
+                <div class="text-center py-24 text-gray-400">
+                    <i class="fa-regular fa-file-lines text-6xl mb-4"></i>
+                    <p class="text-lg font-sans">Silakan isi formulir di atas dan klik <strong>"Buat Modul Ajar dengan AI"</strong> untuk menampilkan dokumen.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const apiKey = ""; // Disetel secara otomatis oleh runtime Canvas Gemini
+        let isContentGenerated = false; 
+
+        // Utility: Fetch dengan exponential backoff
+        async function fetchWithRetry(url, options) {
+            const delays = [1000, 2000, 4000, 8000];
+            for (let i = 0; i <= delays.length; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        throw new Error("HTTP error! status: " + response.status);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    if (i === delays.length) throw error; 
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
+        function setButtonsDisabled(isDisabled) {
+            const buttons = document.querySelectorAll(".action-btn");
+            buttons.forEach(btn => btn.disabled = isDisabled);
+        }
+
+        async function generateAIContent() {
+            const topic = document.getElementById("topic").value.trim();
+            if (!topic) {
+                showToast("Harap masukkan topik utama atau materi terlebih dahulu!", "error");
+                return;
+            }
+
+            setButtonsDisabled(true);
+            document.getElementById("loading").style.display = "flex";
+            isContentGenerated = false;
+
+            const mapel = document.getElementById("mapel").value || "Matematika";
+            const elemenCP = document.getElementById("elemen_cp").value || "Umum";
+            const fase = document.getElementById("fase").value || "Fase B / Kelas 4";
+            const alokasiWaktu = document.getElementById("alokasi_waktu").value || "2 x 35 Menit (1 Pertemuan)";
+            const tahunAjaran = document.getElementById("tahun_ajaran").value || "2026/2027";
+            const modelPembelajaran = document.getElementById("model_pembelajaran").value;
+            const teacher = document.getElementById("teacher").value || "RENJER, S.Pd";
+            const school = document.getElementById("school").value || "SMPN 8 MATARAM";
+            const pendekatan = document.getElementById("pendekatan").value;
+
+            // Handle Logo file upload conversion to base64 for document embedding
+            const logoInput = document.getElementById("school_logo");
+            let logoBase64 = "";
+            if (logoInput && logoInput.files && logoInput.files[0]) {
+                try {
+                    logoBase64 = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = e => resolve(e.target.result);
+                        reader.onerror = error => reject(error);
+                        reader.readAsDataURL(logoInput.files[0]);
+                    });
+                } catch (e) {
+                    console.error("Gagal membaca logo:", e);
+                }
+            }
+
+            const systemPrompt = `Anda adalah pakar penyusun Modul Ajar Kurikulum Merdeka Terupdate 2026/2027.
+Output HANYA berupa struktur HTML murni. DILARANG KERAS menyertakan tag <html>, <head>, <body>, atau markdown code block \`\`\`html. 
+PENTING (ANTI-MARKDOWN): Jangan gunakan simbol markdown seperti ** atau ##. Gunakan <strong> untuk tebal dan <h3> untuk judul bagian.
+
+ATURAN KURIKULUM MERDEKA 2026/2027:
+- Gunakan terminologi "Dimensi Profil Lulusan" (DILARANG menggunakan kata Profil Pelajar Pancasila lama). Pilih HANYA dari 8 Dimensi Profil Lulusan ini:
+  1. Keimanan dan Ketakwaan kepada Tuhan YME
+  2. Kewargaan
+  3. Penalaran Kritis
+  4. Kreativitas
+  5. Kolaborasi
+  6. Kemandirian
+  7. Kesehatan (Well-being)
+  8. Komunikasi
+- Wajib mengintegrasikan alur DEEP LEARNING pada Langkah Pembelajaran:
+  * Mindful Learning (Fokus kesadaran penuh, pengenalan emosi/fokus awal)
+  * Meaningful Learning (Keterkaitan materi dengan kehidupan nyata siswa)
+  * Joyful Learning (Aktivitas menyenangkan, permainan, atau kolaborasi interaktif)
+
+ATURAN STRUKTUR DOKUMEN:
+Awali dokumen dengan judul teks rata tengah: <h3>RENCANA PELAKSANAAN PEMBELAJARAN (RPP) / MODUL AJAR</h3><br><h3>INFORMASI UMUM</h3>
+Buat 3 tabel utama 2-kolom berturut-turut (A, B, C):
+
+1. A. IDENTITAS MODUL
+(Tabel 2 Kolom). Berisi field: Nama Penyusun, Instansi/Sekolah, Mata Pelajaran, Elemen CP, Fase / Kelas / Sem., Alokasi Waktu, Model Pembelajaran, Tahun Ajaran.
+
+2. B. IDENTIFIKASI PESERTA DIDIK & PEMBELAJARAN
+(Tabel 2 Kolom). Berisi 3 baris komponen:
+- Kesiapan & Karakteristik Peserta Didik (Deskripsi singkat hasil asesmen awal/kesiapan)
+- Konsep Utama Materi (Deskripsi substansi materi)
+- Dimensi Profil Lulusan (Sebutkan 3-4 dimensi relevan dari 8 dimensi resmi terbaru di atas)
+
+3. C. DESAIN PEMBELAJARAN
+(Tabel 2 Kolom). Berisi field: Capaian Pembelajaran (CP), Lintas Disiplin Ilmu, Tujuan Pembelajaran (TP), Pendekatan Belajar, Kemitraan Pembelajaran, Lingkungan Belajar, Pemanfaatan Digital.
+
+4. D. LANGKAH-LANGKAH PEMBELAJARAN (DEEP LEARNING)
+Sajikan dalam tabel runtut yang membagi:
+- Pendahuluan (Mindful Experience) + Waktu
+- Kegiatan Inti (Meaningful & Joyful Experience: Eksplorasi, Kolaborasi, Tantangan) + Waktu
+- Penutup (Refleksi & Asesmen Formatif) + Waktu
+*Gunakan list <ul><li> di dalam sel agar teks tertata rapi.*
+
+5. E. ASESMEN PEMBELAJARAN
+Sajikan teknik Asesmen Awal (Diagnostik), Asesmen Proses (Formatif), dan Asesmen Akhir (Sumatif).
+
+6. F. RUBRIK PENILAIAN
+Buat tabel rubrik penilaian kinerja/sikap/pengetahuan dengan kriteria Kualitatif (Sangat Baik, Baik, Cukup, Perlu Bimbingan).
+
+7. G. LEMBAR KERJA PESERTA DIDIK (LKPD)
+Buat LKPD interaktif berbasis teks dengan petunjuk kerja, pertanyaan pemantik, dan tempat jawaban berupa <div style="border: 1.5pt solid #000; min-height: 140px; margin-top: 8px; padding: 8px; border-radius: 4px;"></div>.
+
+8. H. REMEDIAL & PENGAYAAN + REFLEKSI GURU & SISWA`;
+
+            const userQuery = `Buatkan Modul Ajar lengkap sesuai aturan Kurikulum 2026/2027 tentang topik: "${topic}". 
+Mata Pelajaran: ${mapel}. Elemen CP: ${elemenCP}. Jenjang/Fase: ${fase}. Alokasi Waktu: ${alokasiWaktu}. Tahun Ajaran: ${tahunAjaran}. Guru Penyusun: ${teacher}. Sekolah: ${school}. Model Pembelajaran: ${modelPembelajaran}. Pendekatan: ${pendekatan}.
+Pastikan tabel berukuran 100% dan rapi saat diekspor ke Word.`;
+
+            try {
+                // Menggunakan model Gemini 3 Flash Preview untuk kecepatan dan akurasi tinggi
+                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                if (!result || !result.candidates || result.candidates.length === 0) {
+                    throw new Error("API tidak mengembalikan konten.");
+                }
+                
+                let htmlContent = result.candidates[0].content.parts[0].text;
+                
+                // Pembersihan tag markdown jika ada
+                htmlContent = htmlContent.replace(/```html/ig, "").replace(/```/g, "");
+                htmlContent = htmlContent.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+                htmlContent = htmlContent.replace(/(^|<br>|\n)#{1,4}\s+(.*?)(?=$|\n|<br>|<\/?div>|<\/?p>)/g, "$1<h3>$2</h3>");
+                htmlContent = htmlContent.replace(/(^|<br>|\n)\*\s+(.*?)(?=$|\n|<br>)/g, "$1<li>$2</li>");
+
+                renderDocument(htmlContent, mapel, fase, teacher, school, logoBase64);
+                isContentGenerated = true; 
+            } catch (error) {
+                console.error("Error generation AI:", error);
+                showToast("Gagal memproses AI: " + error.message, "error");
+            } finally {
+                document.getElementById("loading").style.display = "none";
+                setButtonsDisabled(false); 
+            }
+        }
+
+        function renderDocument(content, mapel, fase, teacher, school, logoBase64 = "") {
+            const container = document.getElementById("print-area");
+            const body = document.getElementById("content-body");
+            
+            container.classList.remove("hidden");
+            
+            // KOP DOKUMEN MODUL AJAR PREMIUM DENGAN DUKUNGAN LOGO
+            let logoHtml = "";
+            if (logoBase64) {
+                logoHtml = `<div style="margin-bottom: 8px;"><img src="${logoBase64}" alt="Logo Sekolah" style="max-height: 60px; max-width: 60px; object-fit: contain; display: inline-block; vertical-align: middle; background: #fff; padding: 3px; border-radius: 4px;" /></div>`;
+            }
+
+            const header = "<table class=\"kop-table\" style=\"width: 100%; border-collapse: collapse; margin-bottom: 15pt; border: none;\">" +
+                "<tr><td style=\"background-color: #1e3a8a; padding: 18pt 15pt; text-align: center; border: none; border-bottom: 4px solid #f59e0b; border-radius: 4px 4px 0 0;\">" +
+                logoHtml +
+                "<h1 style=\"font-size: 17pt; font-weight: bold; margin: 0 0 6pt 0; color: #ffffff; text-transform: uppercase; font-family: 'Arial', sans-serif;\">MODUL AJAR KURIKULUM MERDEKA (2026/2027)</h1>" +
+                "<h2 style=\"font-size: 11pt; font-weight: normal; margin: 0; color: #e0f2fe; font-family: 'Arial', sans-serif;\">Mata Pelajaran: <strong>" + mapel + "</strong> &nbsp;|&nbsp; Fase/Kelas: <strong>" + fase + "</strong> &nbsp;|&nbsp; <strong>" + school + "</strong></h2>" +
+                "</td></tr></table>";
+
+            const dateOptions = { day: "numeric", month: "long", year: "numeric" };
+            const today = new Date().toLocaleDateString("id-ID", dateOptions);
+
+            const footer = "<div style=\"margin-top: 35pt; width: 100%; page-break-inside: avoid;\">" +
+                "<table class=\"signature-table\" style=\"border: none !important; width: 100%; margin: 0; background-color: transparent; table-layout: fixed;\">" +
+                "<tr style=\"border: none !important; background-color: transparent;\">" +
+                "<td style=\"border: none !important; width: 50%; text-align: center; vertical-align: bottom; padding: 6pt; font-size: 11pt; background-color: transparent !important;\">" +
+                "Mengetahui,<br>Kepala Sekolah<br><br><br><br><br>" +
+                "( __________________________ )<br>" +
+                "NIP. ..................................." +
+                "</td>" +
+                "<td style=\"border: none !important; width: 50%; text-align: center; vertical-align: bottom; padding: 6pt; font-size: 11pt; background-color: transparent !important;\">" +
+                "......................, " + today + "<br>" +
+                "Guru Mata Pelajaran<br><br><br><br><br>" +
+                "<strong>" + teacher + "</strong><br>" +
+                "NIP. ..................................." +
+                "</td>" +
+                "</tr>" +
+                "</table>" +
+                "</div>" +
+                "<!-- KREDIT KREATOR -->" +
+                "<div style=\"margin-top: 25pt; border-top: 1pt solid #cbd5e1; padding-top: 6pt; text-align: center; font-size: 9.5pt; color: #64748b; font-family: 'Arial', sans-serif;\">" +
+                "<strong>Modul Ajar Kurikulum Merdeka Premium (Deep Learning Standards)</strong><br>" +
+                "Desain oleh RenjeR_Teraniaya &bull; www.tawakkal.id &bull; <em>Aplikasi Tidak Diperjualbelikan</em>" +
+                "</div>";
+
+            body.innerHTML = header + content + footer;
+            container.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        // --- FUNGSI EXPORT KEU FORMAT MS WORD (.DOC) ---
+        function exportDoc() {
+            if (!isContentGenerated) {
+                showToast("Silakan buat Modul Ajar terlebih dahulu sebelum mengunduh!", "warning");
+                return;
+            }
+            
+            setButtonsDisabled(true);
+
+            try {
+                const originalBody = document.getElementById("content-body");
+                const originalTables = originalBody.querySelectorAll("table");
+                
+                const clone = originalBody.cloneNode(true);
+                const cloneTables = clone.querySelectorAll("table");
+
+                cloneTables.forEach((table, index) => {
+                    const origTable = originalTables[index];
+                    const isSignatureTable = table.classList.contains("signature-table");
+                    const isKopTable = table.classList.contains("kop-table");
+                    
+                    table.setAttribute("cellspacing", "0");
+                    table.setAttribute("width", "100%");
+                    table.style.width = "100%";
+                    table.style.tableLayout = "fixed"; 
+                    table.style.msoTableLayoutAlt = "fixed"; 
+                    
+                    if (isSignatureTable || isKopTable) {
+                        table.setAttribute("border", "0");
+                        table.style.border = "none";
+                        table.style.marginBottom = isKopTable ? "15pt" : "10pt";
+                    } else {
+                        table.setAttribute("border", "1");
+                        table.style.borderCollapse = "collapse";
+                        table.style.marginBottom = "12pt";
+                        table.style.border = "1.0pt solid #cbd5e1";
+                    }
+
+                    if (origTable && origTable.rows.length > 0) {
+                        let referenceRow = origTable.rows[0];
+                        for(let r=0; r < origTable.rows.length; r++) {
+                            let hasColspan = Array.from(origTable.rows[r].cells).some(cell => cell.colSpan > 1);
+                            if(!hasColspan) {
+                                referenceRow = origTable.rows[r];
+                                break;
+                            }
+                        }
+
+                        const totalWidth = origTable.offsetWidth;
+
+                        if (totalWidth > 0) {
+                            for(let r=0; r < table.rows.length; r++) {
+                                let currentRow = table.rows[r];
+                                let hasColspan = Array.from(currentRow.cells).some(cell => cell.colSpan > 1);
+                                
+                                if (!hasColspan) {
+                                    let accumulatedPercent = 0;
+                                    for (let i = 0; i < currentRow.cells.length; i++) {
+                                        const origCell = referenceRow.cells[i];
+                                        const cloneCell = currentRow.cells[i];
+                                        
+                                        if (origCell && cloneCell) {
+                                            let percent = Math.round((origCell.offsetWidth / totalWidth) * 100);
+                                            if (i === currentRow.cells.length - 1) {
+                                                percent = 100 - accumulatedPercent;
+                                            }
+                                            accumulatedPercent += percent;
+                                            
+                                            cloneCell.style.width = percent + "%";
+                                            cloneCell.setAttribute("width", percent + "%");
+                                            cloneCell.style.wordWrap = "break-word";
+                                            cloneCell.style.whiteSpace = "normal";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (!isSignatureTable && !isKopTable) {
+                        table.removeAttribute("cellpadding");
+                        table.style.lineHeight = "normal";
+                    }
+                });
+
+                // Format Styling untuk Ekspor Word
+                const ths = clone.querySelectorAll("th");
+                ths.forEach((th) => {
+                    th.style.backgroundColor = "#1e3a8a";
+                    th.style.color = "#ffffff";
+                    th.style.border = "1.0pt solid #1e3a8a";
+                    th.style.fontWeight = "bold";
+                    th.style.padding = "4.0pt 5.0pt";
+                });
+
+                const tds = clone.querySelectorAll("td");
+                tds.forEach((td) => {
+                    const table = td.closest("table");
+                    const isSignatureTable = table.classList.contains("signature-table");
+                    const isKopTable = table.classList.contains("kop-table");
+                    
+                    if (isSignatureTable || isKopTable) return;
+                    
+                    td.style.border = "1.0pt solid #cbd5e1";
+                    td.style.verticalAlign = "top";
+                    td.style.padding = "4.0pt 5.0pt";
+                    
+                    if (!td.previousElementSibling) {
+                        td.style.backgroundColor = "#f8fafc"; 
+                        td.style.fontWeight = "600";
+                    }
+                });
+
+                const content = clone.innerHTML;
+                
+                // MSO Office XML Envelope
+                const htmlString = `
+                <html xmlns:v="urn:schemas-microsoft-com:vml"
+                xmlns:o="urn:schemas-microsoft-com:office:office"
+                xmlns:w="urn:schemas-microsoft-com:office:word"
+                xmlns:m="http://schemas-microsoft.com/office/2004/12/omml"
+                xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Modul Ajar Kurikulum Merdeka</title>
+                    <!--[if gte mso 9]>
+                    <xml>
+                    <w:WordDocument>
+                    <w:View>Print</w:View>
+                    <w:Zoom>100</w:Zoom>
+                    <w:DoNotOptimizeForCustomXhtml/>
+                    </w:WordDocument>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        @page WordSection1 {
+                            size: 595.3pt 841.9pt; /* A4 */
+                            margin: 54.0pt 54.0pt 54.0pt 54.0pt; 
+                            mso-header-margin: 36.0pt;
+                            mso-footer-margin: 36.0pt;
+                        }
+                        div.WordSection1 { page: WordSection1; }
+                        
+                        body, p, li, div { 
+                            font-family: 'Times New Roman', serif; 
+                            font-size: 11.0pt; 
+                            line-height: 1.25; 
+                            color: #000; 
+                            margin: 0 0 4.0pt 0; 
+                        }
+                        
+                        h1, h2, h4 { font-family: 'Arial', sans-serif; }
+                        h1 { text-align: center; font-size: 16.0pt; font-weight: bold; margin: 12.0pt 0 6.0pt 0; }
+                        h2 { text-align: center; font-size: 11.0pt; font-weight: normal; margin: 0; }
+                        
+                        h3 { 
+                            font-size: 13.0pt; 
+                            font-weight: bold; 
+                            border-bottom: solid #1e3a8a 1.5pt; 
+                            color: #1e3a8a; 
+                            text-transform: uppercase; 
+                            margin: 16.0pt 0 8.0pt 0;
+                            font-family: 'Arial', sans-serif;
+                        }
+                        
+                        table { 
+                            border-collapse: collapse; 
+                            width: 100% !important; 
+                            table-layout: fixed !important; 
+                            margin-bottom: 12.0pt; 
+                        }
+                        
+                        th, td { word-wrap: break-word; }
+                    </style>
+                </head>
+                <body>
+                    <div class="WordSection1">
+                        ${content}
+                    </div>
+                </body>
+                </html>`;
+
+                const blob = new Blob(["\ufeff" + htmlString], {
+                    type: "application/msword"
+                });
+                
+                const filename = "Modul_Ajar_" + (document.getElementById("mapel").value || "Kurikulum_Merdeka").replace(/\s+/g, "_") + ".doc";
+                saveAs(blob, filename);
+                showToast("Berhasil mengunduh dokumen Word!", "success");
+            } catch (err) {
+                console.error("Export Word Error:", err);
+                showToast("Gagal mengunduh format Word: " + err.message, "error");
+            } finally {
+                setButtonsDisabled(false);
+            }
+        }
+
+        // Salin Teks HTML ke Clipboard
+        function copyHtmlContent() {
+            const body = document.getElementById("content-body");
+            if (!body) return;
+            
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = body.innerHTML;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            
+            showToast("Kode HTML berhasil disalin ke clipboard!", "info");
+        }
+
+        // Toast Notification Helper (Menggantikan Alert)
+        function showToast(message, type = "info") {
+            const toast = document.createElement("div");
+            let bg = "bg-slate-800";
+            if (type === "error") bg = "bg-red-600";
+            if (type === "success") bg = "bg-emerald-600";
+            if (type === "warning") bg = "bg-amber-600";
+
+            toast.className = `fixed bottom-5 right-5 ${bg} text-white px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-3 transition-all transform translate-y-full opacity-0`;
+            toast.innerHTML = `<span>${message}</span>`;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove("translate-y-full", "opacity-0");
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add("translate-y-full", "opacity-0");
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
